@@ -19,6 +19,11 @@ const productNewRoute = require('./routes/product-new');
 
 app.use('/product-new', productNewRoute);
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the API!');
+});
+
+
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
