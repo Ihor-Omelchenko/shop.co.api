@@ -17,6 +17,10 @@ const productNewRoute = require('./routes/product-new');
 
 app.use('/product-new', productNewRoute);
 
+router.get('/test', (req, res) => {
+    res.json({ status: 'ok', message: 'Test route works' });
+});
+
 app.get('/', (req, res) => {
     res.send('Welcome to the API!');
 });
