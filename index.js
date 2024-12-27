@@ -24,18 +24,10 @@ app.get('/', (req, res) => {
     res.send('Welcome to the API!');
 });
 
-app.get('/product-new', async (req, res) => {
-    try {
-        // Статичний JSON-відповідь
-        const products = [
-            { id: 1, name: 'Product 1', price: 100 },
-            { id: 2, name: 'Product 2', price: 200 },
-            { id: 3, name: 'Product 3', price: 300 }
-        ];
-        res.status(200).json(products);
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching products', error: err });
-    }
+// Маршрут для /product-new
+app.get('/product-new', (req, res) => {
+    console.log('GET request to /product-new');
+    res.json({ message: 'This is the /product-new route!' });
 });
 
 
