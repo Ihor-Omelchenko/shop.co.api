@@ -17,14 +17,6 @@ const productNewRoute = require('./routes/product-new');
 
 app.use('/product-new', productNewRoute);
 
-app.get('/test', (req, res) => {
-    res.json({ status: 'ok', message: 'Test route works' });
-});
-
-app.get('/', (req, res) => {
-    res.send('Welcome to the API!');
-});
-
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 3000;
 
