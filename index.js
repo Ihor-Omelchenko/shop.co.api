@@ -26,10 +26,15 @@ app.get('/', (req, res) => {
 
 app.get('/product-new', async (req, res) => {
     try {
-        const product = await Product.find();
-        res.status(200).json(product);
+        // Статичний JSON-відповідь
+        const products = [
+            { id: 1, name: 'Product 1', price: 100 },
+            { id: 2, name: 'Product 2', price: 200 },
+            { id: 3, name: 'Product 3', price: 300 }
+        ];
+        res.status(200).json(products);
     } catch (err) {
-        res.status(500).json({ message: 'Error fetching product', error: err });
+        res.status(500).json({ message: 'Error fetching products', error: err });
     }
 });
 
