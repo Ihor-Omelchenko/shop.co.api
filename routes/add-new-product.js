@@ -1,15 +1,15 @@
 const express = require('express');
 const Product = require('../models/Product');
+const Image = require('../models/Image');
 const multer = require('multer');
 const router = express.Router();
 require('dotenv').config();
-
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', upload.array('images', 10), async (req, res) => {
     try {
         const productData = req.body;
 
@@ -22,12 +22,26 @@ router.post('/', upload.single('image'), async (req, res) => {
             return res.status(409).json({ error: 'Product with this ID already exists' });
         }
 
-        if (req.file) {
-            productData.imageData = req.file.buffer.toString('base64');
-            productData.img = `${baseUrl}/products/${productData._id}/image`;
-        } else {
-            return res.status(400).json({ error: 'Image file is required' });
+        const imageUrls = [];
+
+        if (req.files) {
+            for (const file of req.files) {
+                const base64Image = file.buffer.toString('base64');
+                const fileName = `${Date.now()}-${file.originalname}`;
+
+                const newImage = new Image({
+                    productId: productData._id,
+                    imageData: base64Image,
+                    fileName: fileName,
+                });
+                await newImage.save();
+
+                const imageUrl = `${baseUrl}/images/${newImage._id}`;
+                imageUrls.push(imageUrl);
+            }
         }
+
+        productData.images = imageUrls;
 
         const newProduct = new Product(productData);
         const savedProduct = await newProduct.save();

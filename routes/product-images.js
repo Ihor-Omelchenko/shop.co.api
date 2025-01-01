@@ -1,24 +1,16 @@
 const express = require('express');
-const Product = require('../models/Product');
+const Image = require('../models/Image');
 const router = express.Router();
 
-router.get('/:id/image', async (req, res) => {
-    console.log(`Request received for image with ID: ${req.params.id}`);
+router.get('/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const image = await Image.findById(req.params.id);
 
-        if (!product) {
-            console.log('Product not found');
-            return res.status(404).json({ error: 'Product not found' });
-        }
-
-        if (!product.imageData) {
-            console.log('Image data not found for product');
+        if (!image) {
             return res.status(404).json({ error: 'Image not found' });
         }
 
-        const imgBuffer = Buffer.from(product.imageData, 'base64');
-
+        const imgBuffer = Buffer.from(image.imageData, 'base64');
         res.writeHead(200, {
             'Content-Type': 'image/jpeg',
             'Content-Length': imgBuffer.length,
