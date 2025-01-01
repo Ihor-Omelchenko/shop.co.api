@@ -66,12 +66,12 @@ The following dependencies are used in this project:
         - `images`: (File) One or more images of the product.
         - `price`: (Number) Price of the product.
         - `category`: (String) Category of the product.
-        - `discount`: (Number)
-        - `rating`: (Number)
-        - `quantity`: (Number)
-        - `timerEndsAt`: (Number)
-        - `creationDate`: (Number)
-        - `updateDate`: (Number)
+        - `discount`: (Number) Discount applied to the product
+        - `rating`: (Number) Price of the product
+        - `quantity`: (Number) Quantity of the product available
+        - `timerEndsAt`: (Number) Timestamp indicating when the timer ends
+        - `creationDate`: (Number) Timestamp when the product was created
+        - `updateDate`: (Number) Timestamp of the last update to the product
        
 
 - **Response**:
