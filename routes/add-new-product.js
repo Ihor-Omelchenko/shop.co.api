@@ -39,23 +39,4 @@ router.post('/', upload.single('image'), async (req, res) => {
     }
 });
 
-router.get('/:id/image', async (req, res) => {
-    try {
-        const product = await Product.findById(req.params.id);
-
-        if (!product || !product.imageData) {
-            return res.status(404).json({ error: 'Image not found' });
-        }
-        const imgBuffer = Buffer.from(product.imageData, 'base64');
-        res.writeHead(200, {
-            'Content-Type': 'image/jpeg',
-            'Content-Length': imgBuffer.length
-        });
-        res.end(imgBuffer);
-    } catch (error) {
-        console.error('Error retrieving image:', error);
-        res.status(500).json({ error: 'Failed to retrieve image' });
-    }
-});
-
 module.exports = router;

@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const ProductSchema = new mongoose.Schema({
     _id: Number,
     title: String,
-    img: String, // URL для доступу до зображення
-    imageData: String, // Base64 дані зображення
+    img: String,
+    imageData: String,
     price: Number,
     discount: Number,
     category: String,
