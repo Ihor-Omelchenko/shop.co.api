@@ -13,9 +13,11 @@ mongoose.connect(process.env.MONGO_URI, {
     .then(() => console.log('MongoDB Atlas connected'))
     .catch(err => console.error('Connection error:', err));
 
-const productNewRoute = require('./routes/product-new');
+const allProductRoute = require('./routes/products');
+const addNewProductRoute = require('./routes/add-new-product');
 
-app.use('/product-new', productNewRoute);
+app.use('/products', allProductRoute);
+app.use('/addProduct', addNewProductRoute);
 
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 3000;
