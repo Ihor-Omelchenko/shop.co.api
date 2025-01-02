@@ -16,10 +16,12 @@ mongoose.connect(process.env.MONGO_URI, {
 const allProductRoute = require('./routes/products');
 const addNewProductRoute = require('./routes/add-new-product');
 const productImagesRoute = require('./routes/product-images');
+const deleteProductRoute = require('./routes/delete-product');
 
 app.use('/products', allProductRoute);
 app.use('/addProduct', addNewProductRoute);
 app.use('/images', productImagesRoute);
+app.use('/deleteProduct', deleteProductRoute);
 
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 3000;

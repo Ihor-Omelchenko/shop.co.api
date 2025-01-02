@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ImageSchema = new mongoose.Schema({
-    productId: Number,
+    productId: String,
     imageData: String,
     fileName: String,
 }, { collection: 'images' });

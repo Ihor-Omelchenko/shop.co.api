@@ -12,7 +12,7 @@ This project provides a backend API for managing products and their associated i
 ## Requirements
 
 ### Prerequisites
-- Node.js (v20 or newer)
+- Node.js (v22.9 or newer)
 - MongoDB (Atlas or Local instance)
 
 ### Dependencies
@@ -22,6 +22,7 @@ The following dependencies are used in this project:
 - `multer` - Middleware for handling file uploads
 - `dotenv` - For environment variable management
 - `cors` - For enabling Cross-Origin Resource Sharing
+- `uuid` - For creating a unique identifier
 
 ---
 
@@ -61,7 +62,6 @@ The following dependencies are used in this project:
 - **Description**: Adds a new product with associated images.
 - **Request Body**:
     - Form-data:
-        - `_id`: (String) Unique identifier for the product.
         - `title`: (String) Title of the product.
         - `images`: (File) One or more images of the product.
         - `price`: (Number) Price of the product.
@@ -78,20 +78,20 @@ The following dependencies are used in this project:
     - **201 Created**:
         ```json
         {
-          "_id": "1",
-          "title": "Test Product",
+          "_id": "83b1ad9f-b709-4177-a47e-fdc99dcf5fc8",
+          "title": "52wsefwe",
           "images": [
-            "http://localhost:3000/images/64e5b4f5d6f8e12345",
-            "http://localhost:3000/images/64e5b4f6d6f8e12346"
+          "https://shop-co-api.vercel.app/images/6776a94bb988f7ea943c386c",
+          "https://shop-co-api.vercel.app/images/6776a94bb988f7ea943c386e"
           ],
-          "price": 100,
-          "category": "Electronics",
-          "discount": 10,
+          "price": 50,
+          "discount": 0,
+          "category": "category",
           "rating": 4,
-          "quantity": 422,
-          "timerEndsAt": 1111111111,
-          "creationDate": 1111111111,
-          "updateDate": 1111111111,
+          "quantity": 55,
+          "timerEndsAt": 1735829801,
+          "creationDate": 1735829801,
+          "updateDate": 1735829801,
           "__v": 0
         }
         ```
@@ -119,6 +119,27 @@ The following dependencies are used in this project:
 #### Get All Products
 **GET** `/products`
 - Returns a list of all products.
+---
+
+### **4. Delete Product**
+
+#### Delete Product by id
+**DELETE** `/deleteProduct/:id`
+- Deletes a product by its `_id` and all images assigned to it.
+
+  - **Response**:
+    - **200 OK**: 
+      ```json
+        {
+            "message": "Product and associated images deleted successfully."
+        }
+      ```
+      - **404 Not Found**: 
+      ```json
+        {
+          "error": "Product not found"
+        }
+      ```
 ---
 
 ## Database Structure

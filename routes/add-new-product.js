@@ -2,6 +2,7 @@ const express = require('express');
 const Product = require('../models/Product');
 const Image = require('../models/Image');
 const multer = require('multer');
+const { v4: uuidv4 } = require('uuid'); // Імпортуємо бібліотеку для генерації унікальних ID
 const router = express.Router();
 require('dotenv').config();
 
@@ -13,14 +14,12 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     try {
         const productData = req.body;
 
-        if (!productData._id || !productData.title || !productData.price || !productData.category) {
+        if (!productData.title || !productData.price || !productData.category) {
             return res.status(400).json({ error: 'Some required fields are missing' });
         }
 
-        const existingProduct = await Product.findById(productData._id);
-        if (existingProduct) {
-            return res.status(409).json({ error: 'Product with this ID already exists' });
-        }
+        const generatedId = uuidv4();
+        productData._id = generatedId;
 
         const imageUrls = [];
 
