@@ -79,10 +79,10 @@ The following dependencies are used in this project:
         ```json
         {
           "_id": "83b1ad9f-b709-4177-a47e-fdc99dcf5fc8",
-          "title": "52wsefwe",
+          "title": "Product",
           "images": [
-          "https://shop-co-api.vercel.app/images/6776a94bb988f7ea943c386c",
-          "https://shop-co-api.vercel.app/images/6776a94bb988f7ea943c386e"
+              "https://{{your-url-address}}/images/6776a94bb988f7ea943c386c",
+              "https://{{your-url-address}}/images/6776a94bb988f7ea943c386e"
           ],
           "price": 50,
           "discount": 0,
