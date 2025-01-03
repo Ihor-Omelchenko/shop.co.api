@@ -2,10 +2,12 @@
 # Backend API Documentation
 
 ## Overview
-This project provides a backend API for managing products and their associated images. The API allows clients to:
+This project provides a robust backend API for managing products and their associated images. The API offers the following functionalities:
 - Add new products with multiple images.
-- Retrieve products and their images.
+- Retrieve products and their images with support for pagination.
 - Store images in the database as Base64 and provide URLs for accessing them.
+- Delete products along with their associated images.
+- Return data such as total record count for better client-side management.
 
 ---
 
@@ -116,9 +118,35 @@ The following dependencies are used in this project:
 
 ### **3. Additional Routes**
 
-#### Get All Products
+#### Get All Products 
 **GET** `/products`
 - Returns a list of all products.
+
+#### Get all products by pagination
+**GET** `/products?page=1&limit=5`
+- Returns the list by pagination
+  - **Response**:
+    - **200 OK**:
+      ```json
+        {
+            "products": [
+                {...},
+                {...},
+                {...},
+                {...},
+                {...}
+            ],
+            "totalRecords": 10,
+            "currentPage": 1,
+            "totalPages": 2
+        }
+      ```
+        - **404 Not Found**:
+      ```json
+        {
+          "error": "Error fetching product"
+        }
+      ```
 ---
 
 ### **4. Delete Product**
