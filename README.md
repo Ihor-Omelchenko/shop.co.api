@@ -120,7 +120,7 @@ The following dependencies are used in this project:
 
 #### Get All Products 
 **GET** `/products`
-- Returns a list of all products.
+- Returns a list of products with the default value `page=1` `limit=10`
 
 #### Get all products by pagination
 **GET** `/products?page=1&limit=5`
