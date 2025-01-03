@@ -116,7 +116,7 @@ The following dependencies are used in this project:
 
 ---
 
-### **3. Additional Routes**
+### **3. Get Products List Routes**
 
 #### Get All Products 
 **GET** `/products`
