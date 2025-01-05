@@ -8,6 +8,7 @@ This project provides a robust backend API for managing products and their assoc
 - Store images in the database as Base64 and provide URLs for accessing them.
 - Delete products along with their associated images.
 - Return data such as total record count for better client-side management.
+- Edit existing products
 
 ---
 
@@ -57,7 +58,6 @@ The following dependencies are used in this project:
 ---
 
 ## API Endpoints
-
 ### **1. Add a Product**
 **POST** `/addProduct`
 
@@ -117,14 +117,13 @@ The following dependencies are used in this project:
 ---
 
 ### **3. Get Products List Routes**
-
 #### Get All Products 
 **GET** `/products`
-- Returns a list of products with the default value `page=1` `limit=10`
+- **Description**: Returns a list of products with the default value `page=1` `limit=10`
 
 #### Get all products by pagination
 **GET** `/products?page=1&limit=5`
-- Returns the list by pagination
+- **Description**: Returns the list by pagination
   - **Response**:
     - **200 OK**:
       ```json
@@ -150,10 +149,9 @@ The following dependencies are used in this project:
 ---
 
 ### **4. Delete Product**
-
 #### Delete Product by id
 **DELETE** `/deleteProduct/:id`
-- Deletes a product by its `_id` and all images assigned to it.
+- **Description**: Deletes a product by its `_id` and all images assigned to it.
 
   - **Response**:
     - **200 OK**: 
@@ -166,6 +164,52 @@ The following dependencies are used in this project:
       ```json
         {
           "error": "Product not found"
+        }
+      ```
+---
+
+### **5. Edit Product**
+#### Edit Product by id
+**PUT** `/editProduct/:id`
+- **Description**: Edit a product by its `_id`.
+- **Request Body**:
+    - Form-data:
+        - `title`: (String) Title of the product.
+        - `images`: (File) One or more images of the product.
+        - `price`: (Number) Price of the product.
+        - `category`: (String) Category of the product.
+        - `discount`: (Number) Discount applied to the product
+        - `rating`: (Number) Price of the product
+        - `quantity`: (Number) Quantity of the product available
+        - `timerEndsAt`: (Number) Timestamp indicating when the timer ends
+        - `creationDate`: (Number) Timestamp when the product was created
+        - `updateDate`: (Number) Timestamp of the last update to the product
+
+
+- **Response**:
+    - **200 OK**:
+      ```json
+        {
+            "_id": "089254f7-e07d-4a32-9446-3c1e2b8bf4f5",
+            "title": "Product 1.2",
+            "images": [
+              "https://{{your-url-address}}/images/677ac2225d68a3b2f71684ba"
+            ],
+            "price": 1000,
+            "discount": 0,
+            "category": "Сategory",
+            "rating": 2.3,
+            "quantity": 14,
+            "timerEndsAt": 1735829801,
+            "creationDate": 1735829801,
+            "updateDate": 1735829801,
+            "__v": 0
+        }
+      ```
+        - **404 Not Found**:
+      ```json
+        {
+          "error": "Failed to update product"
         }
       ```
 ---
