@@ -9,7 +9,6 @@ This project provides a robust backend API for managing products and their assoc
 - Delete products along with their associated images.
 - Return data such as total record count for better client-side management.
 - Edit existing products
-
 ---
 
 ## Requirements
