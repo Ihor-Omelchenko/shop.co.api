@@ -150,14 +150,30 @@ The following dependencies are used in this project:
 
 ### **4. Delete Product**
 #### Delete Product by id
-**DELETE** `/deleteProduct/:id`
+**DELETE** `/deleteProduct`
 - **Description**: Deletes a product by its `_id` and all images assigned to it.
+
+  - **Request Body**:
+    - Form-data:
+      ```json
+          {
+              "productIds": [
+                  "63e812f4d7c13e001c8b4567",
+                  "63e812f4d7c13e001c8b4568",
+                  "63e812f4d7c13e001c8b4569"
+              ]
+          }
+      ```
 
   - **Response**:
     - **200 OK**: 
       ```json
         {
-            "message": "Product and associated images deleted successfully."
+          "message": "Products and associated images deleted successfully.",
+          "deletedProducts": [
+              "b8b709b7-e905-41da-a9ea-1eb54c82ce08",
+              "06d9bc2b-9873-4b4c-95f0-4cd4ea40eff7"
+          ]
         }
       ```
       - **404 Not Found**: 
