@@ -19,6 +19,7 @@ router.get('/', async (req, res) => {
             products,
             totalRecords,
             currentPage: page,
+            limit: req.query.limit,
             totalPages: Math.ceil(totalRecords / limit),
         });
     } catch (err) {
