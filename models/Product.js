@@ -10,8 +10,19 @@ const ProductSchema = new mongoose.Schema({
     rating: Number,
     quantity: Number,
     timerEndsAt: Number,
-    creationDate: Number,
-    updateDate: Number
+    creationDate: {
+        type: Number,
+        default: () => Date.now()
+    },
+    updateDate: {
+        type: Number,
+        default: () => Date.now()
+    }
 }, { collection: 'products' });
+
+ProductSchema.pre('save', function (next) {
+    this.updateDate = Date.now();
+    next();
+});
 
 module.exports = mongoose.model('Item', ProductSchema);

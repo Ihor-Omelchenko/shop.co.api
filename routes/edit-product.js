@@ -41,6 +41,8 @@ router.put('/:id', upload.array('images', 10), async (req, res) => {
             updatedData.images = newImageUrls;
         }
 
+        updatedData.updateDate = Date.now();
+
         const updatedProduct = await Product.findByIdAndUpdate(productId, updatedData, {
             new: true,
         });

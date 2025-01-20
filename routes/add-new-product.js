@@ -2,7 +2,7 @@ const express = require('express');
 const Product = require('../models/Product');
 const Image = require('../models/Image');
 const multer = require('multer');
-const { v4: uuidv4 } = require('uuid'); // Імпортуємо бібліотеку для генерації унікальних ID
+const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 require('dotenv').config();
 
@@ -41,6 +41,10 @@ router.post('/', upload.array('images', 10), async (req, res) => {
         }
 
         productData.images = imageUrls;
+
+        const currentTimestamp = Date.now();
+        productData.creationDate = currentTimestamp;
+        productData.updateDate = currentTimestamp;
 
         const newProduct = new Product(productData);
         const savedProduct = await newProduct.save();
