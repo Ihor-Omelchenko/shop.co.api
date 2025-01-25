@@ -5,11 +5,17 @@ const ProductSchema = new mongoose.Schema({
     title: String,
     images: [String],
     price: Number,
-    discount: Number,
     category: String,
+    segment: String,
     rating: Number,
     quantity: Number,
     timerEndsAt: Number,
+    discount: {
+        useDiscount: Boolean,
+        amount: Number,
+        start_date_discount: Number,
+        end_date_discount: Number,
+    },
     creationDate: {
         type: Number,
         default: () => Date.now()
