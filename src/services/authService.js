@@ -24,9 +24,9 @@ const loginUser = async (username, password) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error("Invalid credentials");
 
-    const token = jwt.sign({id: user._id, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1h'});
+    const token = jwt.sign({id: user._id, userName: user.username, role: user.role}, process.env.JWT_SECRET, {expiresIn: '24h'});
 
-    return {token, role: user.role};
+    return {token, userName: user.username, role: user.role};
 };
 
 const deleteUser = async (userId) => {
@@ -39,3 +39,4 @@ const deleteUser = async (userId) => {
 };
 
 module.exports = {registerUser, loginUser, deleteUser};
+

@@ -5,9 +5,11 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: {
         type: String,
-        enum: ['guest', 'admin', 'superadmin'],
+        enum: ['guest', 'admin', 'superAdmin'],
         default: 'guest'
     }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('User', UserSchema);

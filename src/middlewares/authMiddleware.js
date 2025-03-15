@@ -14,14 +14,14 @@ const authMiddleware = (req, res, next) => {
 };
 
 const adminMiddleware = (req, res, next) => {
-    if (!req.user || (req.user.role !== 'admin' && req.user.role !== 'superadmin')) {
+    if (!req.user || (req.user.role !== 'admin' && req.user.role !== 'superAdmin')) {
         return res.status(403).json({error: "Access denied. Admins only"});
     }
     next();
 };
 
 const superAdminMiddleware = (req, res, next) => {
-    if (!req.user || req.user.role !== 'superadmin') {
+    if (!req.user || req.user.role !== 'superAdmin') {
         return res.status(403).json({error: "Access denied. Super Admins only"});
     }
     next();
