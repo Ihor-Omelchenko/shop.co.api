@@ -24,8 +24,8 @@ const loginUser = async (username, password) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error("Invalid credentials");
 
-    const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1m'});
-    const refreshToken = jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: '7d'});
+    const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'});
+    const refreshToken = jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: '1d'});
 
     return {accessToken, refreshToken};
 };
@@ -56,7 +56,7 @@ const newToken = async (refreshToken) => {
         throw new Error("User not found");
     }
 
-    const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1m'});
+    const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'});
 
     return {accessToken};
 }
