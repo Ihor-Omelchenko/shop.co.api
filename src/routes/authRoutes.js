@@ -1,11 +1,12 @@
-const express = require('express');
-const {registerUser, loginUser, deleteUser} = require('../controllers/authController');
+const {registerUser, loginUser, deleteUser, newToken} = require('../controllers/authController');
 const {authMiddleware, adminMiddleware} = require('../middlewares/authMiddleware');
+const express = require('express');
 
 const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.post('/refresh', newToken);
 router.delete('/user/:id', authMiddleware, adminMiddleware, deleteUser);
 
 module.exports = router;

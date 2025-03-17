@@ -8,7 +8,7 @@ const getUsers = async (page = 1, limit = 10, role, search) => {
     }
 
     if (search) {
-        query.username = { $regex: search, $options: 'i' };
+        query.username = {$regex: search, $options: 'i'};
     }
 
     const totalUsers = await User.countDocuments(query);
@@ -16,7 +16,7 @@ const getUsers = async (page = 1, limit = 10, role, search) => {
     const users = await User.find(query)
         .skip((page - 1) * limit)
         .limit(limit)
-        .sort({ username: 1 });
+        .sort({username: 1});
 
     return {
         totalUsers,
@@ -26,4 +26,4 @@ const getUsers = async (page = 1, limit = 10, role, search) => {
     };
 };
 
-module.exports = { getUsers };
+module.exports = {getUsers};

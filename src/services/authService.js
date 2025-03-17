@@ -24,9 +24,10 @@ const loginUser = async (username, password) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error("Invalid credentials");
 
-    const token = jwt.sign({id: user._id, userName: user.username, role: user.role}, process.env.JWT_SECRET, {expiresIn: '24h'});
+    const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1m'});
+    const refreshToken = jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: '7d'});
 
-    return {token, userName: user.username, role: user.role};
+    return {accessToken, refreshToken};
 };
 
 const deleteUser = async (userId) => {
@@ -38,5 +39,27 @@ const deleteUser = async (userId) => {
     return {message: "User deleted successfully"};
 };
 
-module.exports = {registerUser, loginUser, deleteUser};
+const newToken = async (refreshToken) => {
+    if (!refreshToken) {
+        throw new Error("No refresh token provided");
+    }
+
+    let decoded;
+    try {
+        decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    } catch (err) {
+        throw new Error("Invalid refresh token");
+    }
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1m'});
+
+    return {accessToken};
+}
+
+module.exports = {registerUser, loginUser, deleteUser, newToken};
 

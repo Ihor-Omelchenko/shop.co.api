@@ -30,4 +30,14 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = {registerUser, loginUser, deleteUser};
+const newToken = async (req, res) => {
+    try {
+        const {refreshToken} = req.body;
+        const result = await authService.newToken(refreshToken);
+        res.json(result);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
+}
+
+module.exports = {registerUser, loginUser, deleteUser, newToken};
