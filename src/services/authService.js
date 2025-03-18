@@ -25,7 +25,7 @@ const loginUser = async (username, password) => {
     if (!isMatch) throw new Error("Invalid credentials");
 
     const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'});
-    const refreshToken = jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: '1d'});
+    const refreshToken = jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: '24h'});
 
     return {accessToken, refreshToken};
 };
@@ -57,7 +57,7 @@ const newToken = async (refreshToken) => {
     }
 
     const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, { expiresIn: '1h' });
-    const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '1d' });
+    const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '24h' });
 
     return {newAccessToken, newRefreshToken};
 }
