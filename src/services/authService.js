@@ -56,9 +56,10 @@ const newToken = async (refreshToken) => {
         throw new Error("User not found");
     }
 
-    const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'});
+    const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, { expiresIn: '1h' });
+    const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '1d' });
 
-    return {accessToken};
+    return {newAccessToken, newRefreshToken};
 }
 
 module.exports = {registerUser, loginUser, deleteUser, newToken};
