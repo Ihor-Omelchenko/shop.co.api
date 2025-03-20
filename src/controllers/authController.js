@@ -22,7 +22,7 @@ const loginUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const {id} = req.params;
+        const {id} = req.body;
         const result = await authService.deleteUser(id);
         res.json(result);
     } catch (error) {
