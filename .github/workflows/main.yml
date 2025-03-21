@@ -1,0 +1,66 @@
+name: Deploy to Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
+      environment:
+        description: 'Environment to deploy (dev/prod)'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.inputs.branch }}
+
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          BRANCH=${{ github.event.inputs.branch }}
+          ENV=${{ github.event.inputs.environment }}
+          
+          if [ "$ENV" = "dev" ]; then
+            APP_DIR=~/apps/dev
+            PORT=${{ secrets.APP_PORT_DEV }}
+          else
+            APP_DIR=~/apps/prod
+            PORT=${{ secrets.APP_PORT_PROD }}
+          fi
+
+          echo "Deploying branch $BRANCH to $ENV environment..."
+
+          # Завантаження або оновлення коду
+          if [ -d "$APP_DIR" ]; then
+            cd $APP_DIR
+            git fetch origin $BRANCH
+            git checkout $BRANCH
+            git pull origin $BRANCH
+          else
+            git clone -b $BRANCH git@github.com:your-user/your-repo.git $APP_DIR
+            cd $APP_DIR
+          fi
+
+          # Встановлення залежностей
+          npm install
+
+          # Запуск або перезапуск через PM2
+          pm2 delete $ENV || true
+          pm2 start index.js --name "$ENV" -- --port $PORT
+          pm2 save
