@@ -1,8 +1,8 @@
 const {authMiddleware, superAdminMiddleware} = require('../middlewares/authMiddleware');
-const express = require('express');
+const {deleteAdmin} = require('../controllers/adminController');
 const {getAdmins} = require('../controllers/adminController');
-const {deleteAdmin} = require("../controllers/authController");
 
+const express = require('express');
 const router = express.Router();
 
 router.get('/', authMiddleware, getAdmins);

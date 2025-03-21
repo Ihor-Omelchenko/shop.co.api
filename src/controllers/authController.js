@@ -20,16 +20,6 @@ const loginAdmin = async (req, res) => {
     }
 };
 
-const deleteAdmin = async (req, res) => {
-    try {
-        const {id} = req.body;
-        const result = await authService.deleteAdmin(id);
-        res.json(result);
-    } catch (error) {
-        res.status(400).json({error: error.message});
-    }
-};
-
 const newToken = async (req, res) => {
     try {
         const {refreshToken} = req.body;
@@ -40,4 +30,4 @@ const newToken = async (req, res) => {
     }
 }
 
-module.exports = {registerAdmin, loginAdmin, deleteAdmin, newToken};
+module.exports = {registerAdmin, loginAdmin, newToken};

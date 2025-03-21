@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const registerAdmin = async (adminName, password, role = 'guest') => {
     if (role !== 'guest') {
