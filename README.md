@@ -1,6 +1,6 @@
 # 🛒 Shop API (CRM) - Backend
 
-🚀 Backend для управління CRM.
+🚀 Backend for CRM management.
 
 ---
 
