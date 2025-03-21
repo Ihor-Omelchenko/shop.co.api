@@ -1,42 +1,42 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const Admin = require('../models/Admin');
 
-const registerUser = async (username, password, role = 'guest') => {
+const registerAdmin = async (adminName, password, role = 'guest') => {
     if (role !== 'guest') {
         throw new Error("You cannot assign roles manually");
     }
 
-    const existingUser = await User.findOne({username});
-    if (existingUser) throw new Error("User already exists");
+    const existingAdmin = await Admin.findOne({adminName});
+    if (existingAdmin) throw new Error("Admin already exists");
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({username, password: hashedPassword, role});
-    await newUser.save();
+    const newAdmin = new Admin({adminName, password: hashedPassword, role});
+    await newAdmin.save();
 
-    return {userId: newUser._id, message: "User registered successfully", role: newUser.role};
+    return {userId: newAdmin._id, message: "Admin registered successfully", role: newAdmin.role};
 };
 
-const loginUser = async (username, password) => {
-    const user = await User.findOne({username});
-    if (!user) throw new Error("Invalid credentials");
+const loginAdmin = async (adminName, password) => {
+    const admin = await Admin.findOne({adminName});
+    if (!admin) throw new Error("Invalid credentials");
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) throw new Error("Invalid credentials");
 
-    const accessToken = jwt.sign({id: user._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '15m'});
-    const refreshToken = jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: '24h'});
+    const accessToken = jwt.sign({id: admin._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '15m'});
+    const refreshToken = jwt.sign({id: admin._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: '24h'});
 
     return {accessToken, refreshToken};
 };
 
-const deleteUser = async (userId) => {
-    const user = await User.findById(userId);
-    if (!user) {
-        throw new Error("User not found");
+const deleteAdmin = async (adminId) => {
+    const admin = await Admin.findById(adminId);
+    if (!admin) {
+        throw new Error("Admin not found");
     }
-    await User.findByIdAndDelete(userId);
-    return {message: "User deleted successfully"};
+    await Admin.findByIdAndDelete(adminId);
+    return {message: "Admin deleted successfully"};
 };
 
 const newToken = async (refreshToken) => {
@@ -51,16 +51,16 @@ const newToken = async (refreshToken) => {
         throw new Error("Invalid refresh token");
     }
 
-    const user = await User.findById(decoded.id);
-    if (!user) {
-        throw new Error("User not found");
+    const admin = await Admin.findById(decoded.id);
+    if (!admin) {
+        throw new Error("Admin not found");
     }
 
-    const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' });
-    const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '24h' });
+    const newAccessToken = jwt.sign({id: admin._id}, process.env.JWT_ACCESS_SECRET, {expiresIn: '15m'});
+    const newRefreshToken = jwt.sign({id: admin._id}, process.env.JWT_REFRESH_SECRET, {expiresIn: '24h'});
 
     return {newAccessToken, newRefreshToken};
 }
 
-module.exports = {registerUser, loginUser, deleteUser, newToken};
+module.exports = {registerAdmin, loginAdmin, deleteAdmin, newToken};
 

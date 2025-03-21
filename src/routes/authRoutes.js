@@ -1,12 +1,11 @@
-const {registerUser, loginUser, deleteUser, newToken} = require('../controllers/authController');
-const {authMiddleware, adminMiddleware} = require('../middlewares/authMiddleware');
+const {registerAdmin, loginAdmin, newToken} = require('../controllers/authController');
+const {authMiddleware, superAdminMiddleware} = require('../middlewares/authMiddleware');
 const express = require('express');
 
 const router = express.Router();
 
-router.post('/register', registerUser);
-router.post('/login', loginUser);
+router.post('/register', authMiddleware, superAdminMiddleware, registerAdmin);
+router.post('/login', loginAdmin);
 router.post('/refresh', newToken);
-router.post('/adminRemove', authMiddleware, adminMiddleware, deleteUser);
 
 module.exports = router;

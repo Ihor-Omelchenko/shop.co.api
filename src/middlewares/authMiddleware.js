@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const Admin = require('../models/Admin');
 
 
 const authMiddleware = (req, res, next) => {
@@ -22,7 +22,7 @@ const adminMiddleware = (req, res, next) => {
     jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
         if (err) return res.status(401).json({error: 'Invalid or expired token'});
 
-        User.findById(decoded.id)
+        Admin.findById(decoded.id)
             .then(user => {
                 if (!user || (user.role !== 'admin' && user.role !== 'superAdmin')) {
                     return res.status(403).json({error: 'Access denied. Admins only'});
@@ -45,7 +45,7 @@ const superAdminMiddleware = (req, res, next) => {
     jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
         if (err) return res.status(401).json({error: 'Invalid or expired token'});
 
-        User.findById(decoded.id)
+        Admin.findById(decoded.id)
             .then(user => {
                 if (!user || user.role !== 'superAdmin') {
                     return res.status(403).json({error: 'Access denied. SuperAdmins only'});

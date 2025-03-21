@@ -1,29 +1,29 @@
 const authService = require('../services/authService');
 
-const registerUser = async (req, res) => {
+const registerAdmin = async (req, res) => {
     try {
-        const {username, password, role} = req.body;
-        const result = await authService.registerUser(username, password, role);
+        const {adminName, password, role} = req.body;
+        const result = await authService.registerAdmin(adminName, password, role);
         res.status(201).json(result);
     } catch (error) {
         res.status(400).json({error: error.message});
     }
 };
 
-const loginUser = async (req, res) => {
+const loginAdmin = async (req, res) => {
     try {
-        const {username, password} = req.body;
-        const result = await authService.loginUser(username, password);
+        const {adminName, password} = req.body;
+        const result = await authService.loginAdmin(adminName, password);
         res.json(result);
     } catch (error) {
         res.status(400).json({error: error.message});
     }
 };
 
-const deleteUser = async (req, res) => {
+const deleteAdmin = async (req, res) => {
     try {
         const {id} = req.body;
-        const result = await authService.deleteUser(id);
+        const result = await authService.deleteAdmin(id);
         res.json(result);
     } catch (error) {
         res.status(400).json({error: error.message});
@@ -40,4 +40,4 @@ const newToken = async (req, res) => {
     }
 }
 
-module.exports = {registerUser, loginUser, deleteUser, newToken};
+module.exports = {registerAdmin, loginAdmin, deleteAdmin, newToken};
