@@ -21,49 +21,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        fetch-depth: 0
-        ref: ${{ github.event.inputs.branch }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.branch }}
 
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          BRANCH=${{ github.event.inputs.branch }}
-          ENV=${{ github.event.inputs.environment }}
-          
-          if [ "$ENV" = "dev" ]; then
-            APP_DIR=~/apps/dev
-            PORT=${{ secrets.APP_PORT_DEV }}
-          else
-            APP_DIR=~/apps/prod
-            PORT=${{ secrets.APP_PORT_PROD }}
-          fi
-
-          echo "Deploying branch $BRANCH to $ENV environment..."
-
-          # Завантаження або оновлення коду
-          if [ -d "$APP_DIR" ]; then
-            cd $APP_DIR
-            git fetch origin $BRANCH
-            git checkout $BRANCH
-            git pull origin $BRANCH
-          else
-            rm -rf $APP_DIR
-            git clone -b $BRANCH git@github.com:Ihor-Omelchenko/shop.co.api.git $APP_DIR
-            cd $APP_DIR
-          fi
-
-          # Встановлення залежностей
-          npm install
-
-          # Запуск або перезапуск через PM2
-          pm2 delete $ENV || true
-          pm2 start index.js --name "$ENV" -- --port $PORT
-          pm2 save
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            BRANCH=${{ github.event.inputs.branch }}
+            ENV=${{ github.event.inputs.environment }}
+            
+            if [ "$ENV" = "dev" ]; then
+              APP_DIR=~/apps/dev
+              PORT=${{ secrets.APP_PORT_DEV }}
+            else
+              APP_DIR=~/apps/prod
+              PORT=${{ secrets.APP_PORT_PROD }}
+            fi
+            
+            echo "Deploying branch $BRANCH to $ENV environment..."
+            
+            if [ -d "$APP_DIR" ]; then
+              cd $APP_DIR
+              git fetch origin $BRANCH
+              git checkout $BRANCH
+              git pull origin $BRANCH
+            else
+              rm -rf $APP_DIR
+              git clone -b $BRANCH git@github.com:Ihor-Omelchenko/shop.co.api.git $APP_DIR
+              cd $APP_DIR
+            fi
+            
+            npm install
+            
+            pm2 delete $ENV || true
+            pm2 start index.js --name "$ENV" -- --port $PORT
+            pm2 save
