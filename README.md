@@ -12,7 +12,7 @@
 
 ##### For administrators only (role: “superAdmin”)
 
-```http
+```
     POST /api/auth/register
     Body (JSON):
     {
