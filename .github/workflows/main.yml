@@ -55,6 +55,7 @@ jobs:
             git checkout $BRANCH
             git pull origin $BRANCH
           else
+            rm -rf $APP_DIR
             git clone -b $BRANCH git@github.com:Ihor-Omelchenko/shop.co.api.git $APP_DIR
             cd $APP_DIR
           fi
