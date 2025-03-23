@@ -53,28 +53,31 @@ const fetchProducts = async (page, limit, search = '', minPrice = 0, maxPrice = 
     };
 };
 
-const deleteProductById = async (productId) => {
+const deleteProductById = async (productIds) => {
     const db = mongoose.connection.db;
-    const bucket = new GridFSBucket(db, {bucketName: 'uploads'});
+    const bucket = new GridFSBucket(db, { bucketName: 'uploads' });
 
-    const product = await Product.findById(productId);
-    if (!product) {
-        return {error: 'Product not found', status: 404};
-    }
+    const deleted = [];
 
-    const imageId = product.imageUrl?.split('/').pop();
+    for (const productId of productIds) {
+        const product = await Product.findById(productId);
+        if (!product) {continue}
 
-    await Product.deleteOne({_id: productId});
+        const imageId = product.imageUrl?.split('/').pop();
 
-    if (imageId) {
-        try {
-            await bucket.delete(new mongoose.Types.ObjectId(imageId));
-        } catch (err) {
-            console.warn('The image cannot be deleted:', err.message);
+        await Product.deleteOne({_id: productId});
+        deleted.push(productId);
+
+        if (imageId) {
+            try {
+                await bucket.delete(new mongoose.Types.ObjectId(imageId));
+            } catch (err) {
+                console.warn(`Image for product ${productId} could not be deleted:`, err.message);
+            }
         }
     }
 
-    return {message: 'Product and image successfully deleted'};
+    return {message: `${deleted.length} product(s) successfully deleted`, deleted};
 };
 
 module.exports = {createProduct, fetchProducts, deleteProductById};

@@ -27,19 +27,19 @@ const getProducts = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        const {productId} = req.body;
+        const {productIds} = req.body;
 
-        if (!productId) {
-            return res.status(400).json({error: 'No productId specified'});
+        if (!Array.isArray(productIds) || productIds.length === 0) {
+            return res.status(400).json({ error: 'No productIds provided or not an array' });
         }
 
-        const result = await productService.deleteProductById(productId);
+        const result = await productService.deleteProductById(productIds);
 
         if (result.error) {
             return res.status(result.status || 400).json({error: result.error});
         }
 
-        res.json({message: result.message});
+        res.json({message: result.message, deleted: result.deleted});
     } catch (error) {
         res.status(500).json({error: 'Server error'});
     }

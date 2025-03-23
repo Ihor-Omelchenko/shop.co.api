@@ -185,10 +185,11 @@
     POST /api/products/remove
      Body (JSON):
     {
-        "productId": "67dddaccefb408da96cafe02"
+      "productIds": ["id1", "id2", "id3"]
     }
     Response:
     {
-        "message": "Product and image successfully deleted"
+        "message": "Product and image successfully deleted",
+        deleted: ["id1", "id2", "id3"]
     }
 ```
