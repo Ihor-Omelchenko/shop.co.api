@@ -30,15 +30,6 @@ const loginAdmin = async (adminName, password) => {
     return {accessToken, refreshToken};
 };
 
-const deleteAdmin = async (adminId) => {
-    const admin = await Admin.findById(adminId);
-    if (!admin) {
-        throw new Error("Admin not found");
-    }
-    await Admin.findByIdAndDelete(adminId);
-    return {message: "Admin deleted successfully"};
-};
-
 const newToken = async (refreshToken) => {
     if (!refreshToken) {
         throw new Error("No refresh token provided");
@@ -62,5 +53,5 @@ const newToken = async (refreshToken) => {
     return {newAccessToken, newRefreshToken};
 }
 
-module.exports = {registerAdmin, loginAdmin, deleteAdmin, newToken};
+module.exports = {registerAdmin, loginAdmin, newToken};
 

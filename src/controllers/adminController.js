@@ -1,5 +1,4 @@
 const userService = require('../services/adminService');
-const authService = require('../services/authService');
 
 const getAdmins = async (req, res) => {
     try {
@@ -17,7 +16,7 @@ const getAdmins = async (req, res) => {
 const deleteAdmin = async (req, res) => {
     try {
         const {id} = req.body;
-        const result = await authService.deleteAdmin(id);
+        const result = await userService.deleteAdmin(id);
         res.json(result);
     } catch (error) {
         res.status(400).json({error: error.message});

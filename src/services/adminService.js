@@ -27,6 +27,15 @@ const getAdmins = async (page = 1, limit = 10, role, search) => {
     };
 };
 
+const deleteAdmin = async (adminId) => {
+    const admin = await Admin.findById(adminId);
+    if (!admin) {
+        throw new Error("Admin not found");
+    }
+    await Admin.findByIdAndDelete(adminId);
+    return {message: "Admin deleted successfully"};
+};
+
 const getAdminById = async (adminId) => {
     const admin = await Admin.findById(adminId);
     if (!admin) {
@@ -39,4 +48,4 @@ const getAdminById = async (adminId) => {
     return adminObj;
 }
 
-module.exports = {getAdmins, getAdminById};
+module.exports = {getAdmins, getAdminById, deleteAdmin};

@@ -6,8 +6,8 @@ const {getAdmins} = require('../controllers/adminController');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', authMiddleware, getAdmins);
 router.post('/remove', authMiddleware, superAdminMiddleware, deleteAdmin);
-router.post('/getAdminById', getAdminById)
+router.post('/getAdminById', authMiddleware, getAdminById)
+router.get('/', authMiddleware, getAdmins);
 
 module.exports = router;
