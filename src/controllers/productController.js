@@ -12,6 +12,18 @@ const addProduct = async (req, res) => {
     res.status(201).json(product);
 };
 
+const updateProduct  = async (req, res) => {
+    const {_id, title, description, category, reviews, status, price, imageUrl} = req.body;
+
+    const {product, error} = await productService.updateProduct({_id, title, description, category, reviews, status, price, imageUrl});
+
+    if (error) {
+        return res.status(400).json({error});
+    }
+
+    res.status(201).json(product);
+};
+
 const getProducts = async (req, res) => {
     try {
         const page = parseInt(req.query.page, 10) || 1;
@@ -45,4 +57,4 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-module.exports = {addProduct, getProducts, deleteProduct};
+module.exports = {addProduct, getProducts, deleteProduct, updateProduct};

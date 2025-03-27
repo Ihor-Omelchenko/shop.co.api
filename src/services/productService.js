@@ -28,6 +28,47 @@ const createProduct = async ({title, description, category, reviews, status, pri
     }
 };
 
+const updateProduct = async ({ _id, title, description, category, reviews, status, price, imageUrl }) => {
+    try {
+        const product = await Product.findById(_id);
+        if (!product) {
+            return { error: 'Product not found' };
+        }
+
+        const db = mongoose.connection.db;
+        const prevImageId = product.imageUrl?.split('/').pop();
+        const newImageId = imageUrl?.split('/').pop();
+
+        if (newImageId && newImageId !== prevImageId) {
+            if (prevImageId) {
+                await db.collection('uploads.files').deleteOne({ _id: new mongoose.Types.ObjectId(prevImageId) });
+                await db.collection('uploads.chunks').deleteMany({ files_id: new mongoose.Types.ObjectId(prevImageId) });
+            }
+
+            await db.collection('uploads.files').updateOne(
+                { _id: new mongoose.Types.ObjectId(newImageId) },
+                { $set: { 'metadata.temporary': false } }
+            );
+
+            product.imageUrl = imageUrl;
+        }
+
+        product.title = title;
+        product.description = description;
+        product.category = category;
+        product.reviews = reviews;
+        product.status = status;
+        product.price = price;
+        product.updatedAt = new Date();
+
+        const updated = await product.save();
+
+        return { product: updated };
+    } catch (error) {
+        return { error: error.message };
+    }
+};
+
 const fetchProducts = async (page, limit, search = '', minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER) => {
 
     const filter = {
@@ -80,4 +121,4 @@ const deleteProductById = async (productIds) => {
     return {message: `${deleted.length} product(s) successfully deleted`, deleted};
 };
 
-module.exports = {createProduct, fetchProducts, deleteProductById};
+module.exports = {createProduct, fetchProducts, deleteProductById, updateProduct};
