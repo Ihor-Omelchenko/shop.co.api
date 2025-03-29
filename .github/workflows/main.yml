@@ -17,19 +17,6 @@ on:
           - prod
 
 jobs:
-  display-variables:
-    name: ${{ vars.JOB_NAME }}
-    # You can use configuration variables with the `vars` context for dynamic jobs
-    if: ${{ vars.USE_VARIABLES == 'true' }}
-    runs-on: ${{ vars.RUNNER }}
-    environment: ${{ vars.PORT }}
-    steps:
-    - name: Use variables
-      run: |
-        echo "repository variable : $PORT"
-      env:
-        PORT: ${{ vars.PORT }}
-
   deploy:
     runs-on: ubuntu-latest
 
@@ -53,14 +40,12 @@ jobs:
             
             if [ "$ENV" = "dev" ]; then
               APP_DIR=~/apps/dev
-              PORT=${{ vars.PORT }}
+              PORT=${{ secrets.PORT }}
             else
               APP_DIR=~/apps/prod
-              PORT=${{ vars.PORT }}
+              PORT=${{ secrets.PORT }}
             fi
 
-            echo $ENV
-            echo $PORT
             
             echo "Deploying branch $BRANCH to $ENV environment..."
             
