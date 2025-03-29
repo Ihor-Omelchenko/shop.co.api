@@ -40,10 +40,10 @@ jobs:
             
             if [ "$ENV" = "dev" ]; then
               APP_DIR=~/apps/dev
-              PORT=${{ secrets.APP_PORT_DEV }}
+              PORT=${{ vars.PORT }}
             else
               APP_DIR=~/apps/prod
-              PORT=${{ secrets.APP_PORT_PROD }}
+              PORT=${{ vars.PORT }}
             fi
 
             echo $ENV
