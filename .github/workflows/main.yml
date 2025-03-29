@@ -45,8 +45,12 @@ jobs:
               APP_DIR=~/apps/prod
               PORT=${{ secrets.APP_PORT_PROD }}
             fi
+
+            echo $ENV
+            echo $PORT
             
             echo "Deploying branch $BRANCH to $ENV environment..."
+            
             
             if [ -d "$APP_DIR" ]; then
               cd $APP_DIR
