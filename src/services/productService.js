@@ -79,6 +79,11 @@ const fetchProducts = async (page, limit, search = '', minPrice = 0, maxPrice = 
         ]
     };
 
+    if (mongoose.Types.ObjectId.isValid(search)) {
+        filter.$or.push({_id: search});
+    }
+
+
     const totalProduct = await Product.countDocuments(filter);
 
     const products = await Product.find(filter)
