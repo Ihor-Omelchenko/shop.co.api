@@ -2,7 +2,7 @@ const Product = require('../models/Product');
 const mongoose = require('mongoose');
 const {GridFSBucket} = require('mongodb');
 
-const createProduct = async ({title, description, category, reviews, status, price, imageId}) => {
+const createProduct = async ({title, description, category, reviews, status, price, quantity, imageId}) => {
     try {
         const db = mongoose.connection.db;
 
@@ -18,6 +18,7 @@ const createProduct = async ({title, description, category, reviews, status, pri
             reviews,
             status,
             price,
+            quantity,
             imageUrl: `/api/images/${imageId}`
         });
 
@@ -28,7 +29,7 @@ const createProduct = async ({title, description, category, reviews, status, pri
     }
 };
 
-const updateProduct = async ({ _id, title, description, category, reviews, status, price, imageUrl }) => {
+const updateProduct = async ({ _id, title, description, category, reviews, status, quantity, price, imageUrl }) => {
     try {
         const product = await Product.findById(_id);
         if (!product) {
@@ -59,6 +60,7 @@ const updateProduct = async ({ _id, title, description, category, reviews, statu
         product.reviews = reviews;
         product.status = status;
         product.price = price;
+        product.quantity = quantity;
         product.updatedAt = new Date();
 
         const updated = await product.save();
