@@ -13,9 +13,9 @@ const addProduct = async (req, res) => {
 };
 
 const updateProduct  = async (req, res) => {
-    const {_id, title, description, category, reviews, status, price, imageUrl} = req.body;
+    const {_id, title, description, category, reviews, status, price, quantity, imageUrl} = req.body;
 
-    const {product, error} = await productService.updateProduct({_id, title, description, category, reviews, status, price, imageUrl});
+    const {product, error} = await productService.updateProduct({_id, title, description, category, reviews, status, price, quantity, imageUrl});
 
     if (error) {
         return res.status(400).json({error});
