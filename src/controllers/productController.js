@@ -1,9 +1,9 @@
 const productService = require('../services/productService');
 
 const addProduct = async (req, res) => {
-    const {title, description, category, reviews, status, price, quantity, imageId} = req.body;
+    const {title, description, category, reviews, status, price, quantity, petType, imageId} = req.body;
 
-    const {product, error} = await productService.createProduct({title, description, category, reviews, status, price, quantity, imageId});
+    const {product, error} = await productService.createProduct({title, description, category, reviews, status, price, quantity, petType, imageId});
 
     if (error) {
         return res.status(400).json({error});
@@ -13,9 +13,9 @@ const addProduct = async (req, res) => {
 };
 
 const updateProduct  = async (req, res) => {
-    const {_id, title, description, category, reviews, status, price, quantity, imageUrl} = req.body;
+    const {_id, title, description, category, reviews, status, price, quantity, petType, imageUrl} = req.body;
 
-    const {product, error} = await productService.updateProduct({_id, title, description, category, reviews, status, price, quantity, imageUrl});
+    const {product, error} = await productService.updateProduct({_id, title, description, category, reviews, status, price, quantity, petType, imageUrl});
 
     if (error) {
         return res.status(400).json({error});

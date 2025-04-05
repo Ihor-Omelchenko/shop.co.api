@@ -8,7 +8,8 @@ const productSchema = new mongoose.Schema({
     status: {type: String},
     price: {type: Number, required: true},
     quantity: {type: Number, required: true},
-    imageUrl: {type: String}
+    imageUrl: {type: String},
+    petType: {type: String, required: true},
 }, {
     timestamps: true
 });
