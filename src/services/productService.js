@@ -77,10 +77,6 @@ const fetchProducts = async (page, limit, search = '',  minPrice = 0, maxPrice =
 
     const filter = {
         price: {$gte: parseFloat(minPrice), $lte: parseFloat(maxPrice)},
-        $or: [
-            {title: {$regex: search, $options: 'i'}},
-            {description: {$regex: search, $options: 'i'}}
-        ]
     };
 
     if (category) {
@@ -89,6 +85,19 @@ const fetchProducts = async (page, limit, search = '',  minPrice = 0, maxPrice =
 
     if (petType) {
         filter.petType = petType;
+    }
+
+    if (search) {
+        const orConditions = [
+            { title: { $regex: search, $options: 'i' } },
+            { description: { $regex: search, $options: 'i' } }
+        ];
+
+        if (mongoose.Types.ObjectId.isValid(search)) {
+            orConditions.push({ _id: new mongoose.Types.ObjectId(search) });
+        }
+
+        filter.$or = orConditions;
     }
 
     const totalProduct = await Product.countDocuments(filter);
