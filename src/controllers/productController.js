@@ -28,9 +28,9 @@ const getProducts = async (req, res) => {
     try {
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
-        const {search, minPrice, maxPrice} = req.query;
+        const {search, minPrice, maxPrice, category, petType } = req.query;
 
-        const result = await productService.fetchProducts(page, limit, search, minPrice, maxPrice);
+        const result = await productService.fetchProducts(page, limit, search, minPrice, maxPrice, category, petType);
         res.status(200).json(result);
     } catch (error) {
         res.status(400).json({error: error.message});

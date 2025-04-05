@@ -73,7 +73,7 @@ const updateProduct = async ({ _id, title, description, category, reviews, statu
     }
 };
 
-const fetchProducts = async (page, limit, search = '', minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER) => {
+const fetchProducts = async (page, limit, search = '',  minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER, category, petType) => {
 
     const filter = {
         price: {$gte: parseFloat(minPrice), $lte: parseFloat(maxPrice)},
@@ -83,10 +83,13 @@ const fetchProducts = async (page, limit, search = '', minPrice = 0, maxPrice = 
         ]
     };
 
-    if (mongoose.Types.ObjectId.isValid(search)) {
-        filter.$or.push({_id: search});
+    if (category) {
+        filter.category = category;
     }
 
+    if (petType) {
+        filter.petType = petType;
+    }
 
     const totalProduct = await Product.countDocuments(filter);
 
