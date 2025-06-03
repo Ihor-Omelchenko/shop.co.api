@@ -1,20 +1,33 @@
 const mongoose = require('mongoose');
 const {GridFSBucket} = require('mongodb');
 
-const getImageStream = async (fileId) => {
+const getImageStream = async (fileIdStr) => {
     try {
+        const fileId = new mongoose.Types.ObjectId(fileIdStr);
         const db = mongoose.connection.db;
-        const bucket = new GridFSBucket(db, {bucketName: 'uploads'});
+        const bucket = new GridFSBucket(db, { bucketName: 'uploads' });
 
-        const file = await db.collection('uploads.files').findOne({_id: new mongoose.Types.ObjectId(fileId)});
+        const file = await db.collection('uploads.files').findOne({ _id: fileId });
 
         if (!file) {
-            return {error: 'File not found', status: 404};
+            return { error: 'File not found', status: 404 };
         }
 
-        return {file, stream: bucket.openDownloadStream(file._id)};
+        const chunks = [];
+
+        return new Promise((resolve, reject) => {
+            const stream = bucket.openDownloadStream(fileId);
+
+            stream.on('data', chunk => chunks.push(chunk));
+            stream.on('error', err => reject({ error: 'Stream error', status: 500 }));
+            stream.on('end', () => {
+                const buffer = Buffer.concat(chunks);
+                resolve({ file, buffer, status: 200 });
+            });
+        });
     } catch (error) {
-        return {error: 'Server error', status: 500};
+        console.error('getImageStream error:', error.message);
+        return { error: 'Server error', status: 500 };
     }
 };
 

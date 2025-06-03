@@ -6,21 +6,20 @@ const upload = multer({storage});
 
 const getImage = async (req, res) => {
     try {
-        const {file, stream, error, status} = await getImageStream(req.params.id);
+        const { file, buffer, error, status } = await getImageStream(req.params.id);
 
         if (error) {
-            return res.status(status).json({error});
+            return res.status(status).json({ error });
         }
 
-        res.set('Content-Type', file.contentType);
+        res.set('Content-Type', file.contentType || 'application/octet-stream');
         res.set('Content-Disposition', `inline; filename="${file.filename}"`);
-
-        stream.on('error', () => res.status(500).json({error: 'File transfer error'}));
-        stream.pipe(res);
+        res.send(buffer);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 };
+
 
 const uploadToGridFS = async (req, res) => {
     try {
