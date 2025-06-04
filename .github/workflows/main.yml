@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.inputs.branch }}
 
-      - name: Deploy to server
+      - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -37,32 +37,26 @@ jobs:
           script: |
             BRANCH=${{ github.event.inputs.branch }}
             ENV=${{ github.event.inputs.environment }}
-            
+
             if [ "$ENV" = "dev" ]; then
-              APP_DIR=~/apps/dev
-              PORT=${{ secrets.PORT }}
+              APP_DIR=/var/www/backend-dev
             else
-              APP_DIR=~/apps/prod
-              PORT=${{ secrets.PORT }}
+              APP_DIR=/var/www/backend-prod
             fi
 
-            
             echo "Deploying branch $BRANCH to $ENV environment..."
-            
-            
+
             if [ -d "$APP_DIR" ]; then
               cd $APP_DIR
               git fetch origin $BRANCH
               git checkout $BRANCH
               git pull origin $BRANCH
             else
-              rm -rf $APP_DIR
               git clone -b $BRANCH git@github.com:Ihor-Omelchenko/shop.co.api.git $APP_DIR
               cd $APP_DIR
             fi
-            
+
             npm install
-            
-            pm2 delete $ENV || true
-            pm2 start index.js --name "$ENV" -- --port $PORT
+
+            pm2 restart "$ENV" --update-env || pm2 start index.js --name "$ENV"
             pm2 save
